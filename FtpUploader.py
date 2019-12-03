@@ -7,7 +7,7 @@ class FtpUploader:
 	
 	def __init__(self, host, username, passwordFile, port=21, logging=None):
 		if logging:
-			self.addLogging(self, logging)
+			self.addLogging(logging)
 		#Retrieve password
 		with open(passwordFile) as fp:
 			password = fp.readline().strip()
@@ -26,12 +26,18 @@ class FtpUploader:
 	#Assign a logging handler
 	def addLogging(self, logging):
 		self.logging = logging;
-		self.logging.info("FtpUploader - Assigned logging handler")
+		if logging:
+			self.logging.info("FtpUploader - Assigned logging handler")
+		else:
+			print("No logging handler given")
 			
-	#Upload a file
+	#Upload a file - Return the upload status
 	def uploadFile(self, filePath):
 		name = os.path.basename(filePath)
 		with open(filePath, 'rb') as fp:
 			self.connection.storbinary('STOR '+name, fp)
-		if (self.logging): 
-			self.logging.info("FtpUploader - uploadFile - Uploaded ["+name+"]")
+			if (self.logging): 
+				self.logging.info("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
+				print("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
+			return True;
+		return False;
