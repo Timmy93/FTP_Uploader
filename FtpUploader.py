@@ -32,10 +32,10 @@ class FtpUploader:
 			print("No logging handler given")
 			
 	#Upload a file - Return the upload status
-	def uploadFile(self, filePath):
+	def uploadFile(self, filePath, blocksize = 262144):
 		name = os.path.basename(filePath)
 		with open(filePath, 'rb') as fp:
-			self.connection.storbinary('STOR '+name, fp)
+			self.connection.storbinary('STOR '+name, fp, blocksize)
 			if (self.logging): 
 				self.logging.info("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
 				print("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
