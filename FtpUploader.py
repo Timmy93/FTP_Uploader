@@ -41,3 +41,8 @@ class FtpUploader:
 				print("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
 			return True;
 		return False;
+	
+	#Tries to gracefully exit
+	def __del__(self):
+		self.connection.quit()
+		self.logging.info("FtpUploader - __del__ - Quitted gracefully")
