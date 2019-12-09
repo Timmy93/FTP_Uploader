@@ -35,11 +35,16 @@ class FtpUploader:
 	def uploadFile(self, filePath, blocksize = 262144):
 		name = os.path.basename(filePath)
 		with open(filePath, 'rb') as fp:
-			self.connection.storbinary('STOR '+name, fp, blocksize)
-			if (self.logging): 
-				self.logging.info("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
-				print("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
-			return True;
+			try:
+				self.connection.storbinary('STOR '+name, fp, blocksize)
+				if (self.logging): 
+					self.logging.info("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
+					print("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
+				return True;
+			except ftplib.error_perm:
+				self.logging.warn("FtpUploader - uploadFile - Permanent error during upload ["+name+"] - ["+filePath+"]")
+			except ftplib.error_temp:
+				self.logging.warn("FtpUploader - uploadFile - Temporary error during upload ["+name+"] - ["+filePath+"]")
 		return False;
 	
 	#Tries to gracefully exit
