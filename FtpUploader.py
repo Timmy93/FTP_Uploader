@@ -1,6 +1,7 @@
 import requests
 import ftplib
 import os
+import time
 
 #Allows to upload to the 1fichier account
 class FtpUploader:
@@ -32,11 +33,16 @@ class FtpUploader:
 			print("No logging handler given")
 			
 	#Upload a file - Return the upload status
-	def uploadFile(self, filePath, blocksize = 262144):
+	#	blocksize	The size of the block to send - Default 256 KiB
+	#	maxSpeed	Speed in KB/s to mantain during transfer - Default 0 -> No limit
+	def uploadFile(self, filePath, blocksize = 262144, maxSpeed = 0):
+		self.writtenSize = 0
+		self.maxSpeed = maxSpeed * 1024
+		self.uploadStart = time.time()
 		name = os.path.basename(filePath)
 		with open(filePath, 'rb') as fp:
 			try:
-				self.connection.storbinary('STOR '+name, fp, blocksize)
+				self.connection.storbinary('STOR '+name, fp, blocksize, self.throttler)
 				if (self.logging): 
 					self.logging.info("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
 					print("FtpUploader - uploadFile - Uploaded ["+name+"] - ["+filePath+"]")
@@ -46,6 +52,22 @@ class FtpUploader:
 			except ftplib.error_temp:
 				self.logging.warn("FtpUploader - uploadFile - Temporary error during upload ["+name+"] - ["+filePath+"]")
 		return False;
+	
+	total_length = 0
+	start_time = time.time()
+
+	#This function slow down the transmission during
+	def throttler(buf):
+		#Do nothing if no limit set to max speed
+		if not self.maxSpeed:
+			return
+		#Get the written bytes
+		self.writtenSize += sys.getsizeof(buf)
+		#Elapsed time from start
+		elapsed = time.time() - self.uploadStart
+		#Sleep
+		while (self.writtenSize / elapsed) > self.maxSpeed:
+			time.sleep(0.1)
 	
 	#Tries to gracefully exit
 	def __del__(self):
