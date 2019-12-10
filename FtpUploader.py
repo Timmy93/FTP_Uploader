@@ -38,6 +38,8 @@ class FtpUploader:
 	def uploadFile(self, filePath, blocksize = 262144, maxSpeed = 0):
 		self.writtenSize = 0
 		self.maxSpeed = maxSpeed * 1024
+		if not self.maxSpeed:
+			print("Transferring at maximum speed")
 		self.uploadStart = time.time()
 		name = os.path.basename(filePath)
 		with open(filePath, 'rb') as fp:
@@ -60,7 +62,6 @@ class FtpUploader:
 	def throttler(self, buf):
 		#Do nothing if no limit set to max speed
 		if not self.maxSpeed:
-			print("Max speed not set!")
 			return
 		#Get the written bytes
 		self.writtenSize += sys.getsizeof(buf)
