@@ -60,6 +60,7 @@ class FtpUploader:
 	def throttler(self, buf):
 		#Do nothing if no limit set to max speed
 		if not self.maxSpeed:
+			print("Max speed not set!")
 			return
 		#Get the written bytes
 		self.writtenSize += sys.getsizeof(buf)
