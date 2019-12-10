@@ -69,7 +69,7 @@ class FtpUploader:
 		#Elapsed time from start
 		elapsed = time.time() - self.uploadStart
 		avgSpeed = self.writtenSize / elapsed
-		print("Avg speed: ["+avgSpeed+"] - Max speed: ["+self.maxSpeed+"]")
+		print("Avg speed: ["+str(avgSpeed/1024/1024)+"MB/s] - Max speed: ["+str(self.maxSpeed/1024/1024)+"MB/s]")
 		#Sleep
 		while avgSpeed > self.maxSpeed:
 			time.sleep(0.1)
