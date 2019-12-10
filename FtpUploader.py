@@ -79,7 +79,7 @@ class FtpUploader:
 			time.sleep(sleepTime)
 			i+=1
 			if not i%(cycles):
-				prein("Sleeping since "+sleepSeconds+" seconds")
+				print("Sleeping since "+str(sleepSeconds)+" seconds")
 	
 	#Tries to gracefully exit
 	def __del__(self):
