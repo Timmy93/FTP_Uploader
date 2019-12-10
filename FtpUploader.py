@@ -61,25 +61,20 @@ class FtpUploader:
 
 	#This function slow down the transmission during
 	def throttler(self, buf):
+		i = 0
+		sleepTime = 0.1
+		sleepSeconds = 5
 		#Do nothing if no limit set to max speed
 		if not self.maxSpeed:
 			return
 		#Get the written bytes
 		self.writtenSize += sys.getsizeof(buf)
-		#Elapsed time from start
-		elapsed = time.time() - self.uploadStart
-		avgSpeed = self.writtenSize / elapsed
-		# ~ print("Avg speed: ["+str(avgSpeed/1024/1024)+"MB/s] - Max speed: ["+str(self.maxSpeed/1024/1024)+"MB/s]")
-		#Sleep
-		i = 0
-		sleepTime = 0.1
-		sleepSeconds = 5
 		cycles = sleepSeconds/sleepTime
-		while avgSpeed > self.maxSpeed:
+		while self.writtenSize / (time.time() - self.uploadStart) > self.maxSpeed:
 			time.sleep(sleepTime)
 			i+=1
 			if not i%(cycles):
-				print("Elapsed: "+str(elapsed)+"s, started at "+str(self.uploadStart)+" and written "+str(self.writtenSize/1024/1024)+" MB Sleeping since "+str(sleepSeconds)+" seconds")
+				print("Elapsed: "+str(time.time() - self.uploadStart)+"s, started at "+str(self.uploadStart)+" and written "+str(self.writtenSize/1024/1024)+" MB Sleeping since "+str(sleepSeconds)+" seconds")
 	
 	#Tries to gracefully exit
 	def __del__(self):
