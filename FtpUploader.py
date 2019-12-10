@@ -2,6 +2,7 @@ import requests
 import ftplib
 import os
 import time
+import sys
 
 #Allows to upload to the 1fichier account
 class FtpUploader:
