@@ -57,7 +57,7 @@ class FtpUploader:
 	start_time = time.time()
 
 	#This function slow down the transmission during
-	def throttler(buf):
+	def throttler(self, buf):
 		#Do nothing if no limit set to max speed
 		if not self.maxSpeed:
 			return
