@@ -77,7 +77,7 @@ class FtpUploader:
 		cycles = sleepSeconds/sleepTime
 		while avgSpeed > self.maxSpeed:
 			time.sleep(sleepTime)
-			i++
+			i+=1
 			if not i%(cycles):
 				prein("Sleeping since "+sleepSeconds+" seconds")
 	
