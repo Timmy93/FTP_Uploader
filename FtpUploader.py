@@ -75,6 +75,7 @@ class FtpUploader:
 			i+=1
 			if not i%(cycles):
 				print("Elapsed: "+str(time.time() - self.uploadStart)+"s, started at "+str(self.uploadStart)+" and written "+str(self.writtenSize/1024/1024)+" MB Sleeping since "+str(sleepSeconds)+" seconds")
+				self.logging.info("Elapsed: "+str(time.time() - self.uploadStart)+"s, started at "+str(self.uploadStart)+" and written "+str(self.writtenSize/1024/1024)+" MB Sleeping since "+str(sleepSeconds)+" seconds")
 	
 	#Tries to gracefully exit
 	def __del__(self):
