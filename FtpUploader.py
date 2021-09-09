@@ -42,7 +42,7 @@ class FtpUploader:
 		if not self.maxSpeed:
 			print("Transferring at maximum speed")
 		self.uploadStart = time.time()
-		name = os.path.basename(filePath)
+		name = os.path.basename(filePath).encode("utf-8", "ignore").decode("latin-1", "ignore")
 		with open(filePath, 'rb') as fp:
 			try:
 				self.connection.storbinary('STOR '+name, fp, blocksize, self.throttler)
